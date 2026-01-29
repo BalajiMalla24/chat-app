@@ -1,5 +1,9 @@
 Full Stack Realtime Chat App 
 
+### Application link
+https://fullstack-realtime-chat-app-b7cy.onrender.com
+
+
 ### Setup .env file
 
 ```js
@@ -25,3 +29,5 @@ npm run build
 ```shell
 npm start
 ```
+
+

@@ -92,7 +92,7 @@ const Login = () => {
     
       <div className="text-center">
         <p className="text-base-content/60">
-          Already have an account?{" "}
+          Dont have an account?{" "}
           <Link to="/signup" className="link link-primary">
             sign-up
           </Link>

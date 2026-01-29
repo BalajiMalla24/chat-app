@@ -1,10 +1,10 @@
 import React from 'react'
 import { userThemeStore } from '../store/userThemeStore'
 import { THEMES } from '../../constants';
-const PREVIEW_MESSAGES = [
-    { id: 1, content: "Hey! How's it going?", isSent: false },
-    { id: 2, content: "I'm doing great! Just working on some new features.", isSent: true },
-  ];
+// const PREVIEW_MESSAGES = [
+//     { id: 1, content: "Hey! How's it going?", isSent: false },
+//     { id: 2, content: "I'm doing great! Just working on some new features.", isSent: true },
+//   ];
 const Settings = () => {
     const {theme , settheme } = userThemeStore()
 

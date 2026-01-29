@@ -10,14 +10,23 @@ import Profile from "./pages/Profile";
 import { userAuthStore } from "./store/userAuthStore";
 import { userThemeStore } from "./store/userThemeStore";
 import { Loader } from "lucide-react";
+
 function App() {
-  const { authUser, checkingAuth, isCheckingAuth, onlineUsers } = userAuthStore();
+  const { authUser, checkingAuth, isCheckingAuth, onlineUsers } =
+    userAuthStore();
   const { theme } = userThemeStore();
 
   console.log({ onlineUsers });
+
   useEffect(() => {
-    checkingAuth();
-  }, [checkingAuth]);
+    const tokenExists = document.cookie.includes("jwt");
+
+    if (tokenExists) {
+      checkingAuth();
+    } else {
+      userAuthStore.setState({ isCheckingAuth: false });
+    }
+  }, [checkingAuth]); // Ensuring proper dependency tracking
 
   if (isCheckingAuth && !authUser)
     return (
@@ -25,6 +34,7 @@ function App() {
         <Loader className="size-10 animate-spin" />
       </div>
     );
+
   return (
     <div data-theme={theme}>
       <Navbar />

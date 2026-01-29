@@ -6,7 +6,7 @@ import { Apierror } from "../utils/apierror.js";
 const userVerify = async (req , res , next) =>{
 
     try {
-        const token = req.cookies?.jwt
+        const token = req.cookies?.jwt || req.headers.authorization?.split(" ")[1]
     
         if(!token){
             throw new Apierror( 401 , "Unauthorized - no token provided")

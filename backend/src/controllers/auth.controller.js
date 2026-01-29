@@ -42,7 +42,7 @@ const signup = asynchandler(async (req, res) => {
 
 
     const options = {
-        httpOnly: true,
+      
         secure: process.env.NODE_ENV !== "development",
         maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: "strict"
@@ -82,15 +82,16 @@ const login = asynchandler(async (req, res) => {
 
     const { token } = await generatejwttoken(user._id, res)
     const options = {
-        httpOnly: true,
+    
         secure: process.env.NODE_ENV !== "development",
         maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: "strict"
     }
+    res.cookie("jwt" , token , options)
     return res.status(200)
-        .cookie("jwt", token, options)
+        
         .json(
-            new apiresponse(200, "user loggedin successfully")
+            new apiresponse(200, token , "user loggedin successfully")
         )
 
 

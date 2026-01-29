@@ -3,15 +3,15 @@ import { userAuthStore } from "../store/userAuthStore";
 import { Camera, User, Mail } from "lucide-react";
 
 const Profile = () => {
-  const { isUpdatingProfile, authUser, updateprofile, checkingAuth } =
+  const { isUpdatingProfile, authUser, updateProfile, checkingAuth } =
     userAuthStore();
   const [selectedImg, setselectedImg] = useState(null);
-   console.log({authUser})
+  console.log({ authUser });
   useEffect(() => {
     if (!authUser) {
       checkingAuth();
     }
-    console.log(authUser)
+    console.log(authUser);
   }, [authUser, checkingAuth]);
 
   const handleImageUpload = async (e) => {
@@ -24,7 +24,7 @@ const Profile = () => {
     reader.onload = async () => {
       const base64Image = reader.result;
       setselectedImg(base64Image);
-      await updateprofile({ coverphoto: base64Image });
+      await updateProfile({ coverphoto: base64Image });
     };
   };
   return (
@@ -39,9 +39,7 @@ const Profile = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={
-                  selectedImg || authUser.coverphoto || "/avatar.png"
-                }
+                src={selectedImg || authUser.coverphoto || "/avatar.png"}
                 alt="Profile"
                 className="size-32 rounded-full object-cover border-4 "
               />

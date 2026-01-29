@@ -1,15 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState  } from 'react'
 import { userChatStore } from '../store/userChatStore'
 import { userAuthStore } from '../store/userAuthStore'
 import { Users } from 'lucide-react'
 const Sidebar = () => {
     const {onlineUsers} = userAuthStore()
     const {users , getUsers , setSelectedUser , selectedUser , isUsersLoading} = userChatStore()
+     const [showOnlineOnly , setshowOnlineOnly] = useState(false);
+
 
     useEffect(()=>{
         getUsers()
         console.log(users)
     } , [getUsers])
+
+    const filteredUsers = showOnlineOnly ? users.filter(user => onlineUsers.includes(user._id)) : users;
     if(isUsersLoading) return <div>Loading ...</div>
     return (
         <aside className='h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200'>
@@ -18,12 +22,23 @@ const Sidebar = () => {
                   <Users className='size-6'/>
                   <span className='font-medium hidden lg:block'>Contacts</span>
                 </div>
-
+                <div className="mt-3 hidden lg:flex items-center gap-2">
+          <label className="cursor-pointer flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showOnlineOnly}
+              onChange={(e) => setshowOnlineOnly(e.target.checked)}
+              className="checkbox checkbox-sm"
+            />
+            <span className="text-sm">Show online only</span>
+          </label>
+          <span className="text-xs text-zinc-500">({onlineUsers.length - 1} online)</span>
+        </div>
 
             </div>
               <div className='overflow-y-auto w-full py-3'>
                  {
-                    users.map((user)=>(
+                    filteredUsers.map((user)=>(
                         <button className={`w-full p-3 flex items-center gap-3 hover:bg-base-300 transition-colors
                             ${selectedUser?._id === user?._id ? "bg-base-300 ring-1 ring-base-300" : ""}`}
                             onClick={() => setSelectedUser(user)}
@@ -53,6 +68,12 @@ const Sidebar = () => {
                         
                     ))
                  }  
+
+                 {
+                    filteredUsers.length===0 && (
+                        <div className='text-center text-zinc-500 py-4'>No online Users</div>
+                    )
+                 }
               </div>            
         </aside>
     )

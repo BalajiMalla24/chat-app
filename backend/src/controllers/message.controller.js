@@ -4,6 +4,8 @@ import { apiresponse } from "../utils/apiresponse.js";
 import { User } from "../models/user.model.js";
 import { message } from "../models/message.model.js";
 import cloudinary from "../utils/Cloudinary.js";
+import { getReciversocketid , io } from "../utils/socket.js";
+
 
 const getUsersforSidebar = asynchandler(async (req , res)=>{
     //req.user from userVerify
@@ -12,7 +14,7 @@ const getUsersforSidebar = asynchandler(async (req , res)=>{
     if(!LoggedInUser){
         throw new Apierror(401 , "User is not logged in")
     }
-    const sidebarUsers = await User.find({_id:{$ne:LoggedInUser}})
+    const sidebarUsers = await User.find({_id:{$ne:LoggedInUser}}).select("-password")
 
     if(!sidebarUsers){
         throw new Apierror(404 , "there are no users in your contact list")
@@ -56,8 +58,14 @@ const sendMessages = asynchandler(async(req ,res)=>{
         image:imageUrl,
         text
     })
-    await newMessage.save({validateBeforeSave:false})
+    await newMessage.save()
 
+
+    const recieversocketid = getReciversocketid(receiverid)
+
+    if(recieversocketid){
+        io.to(recieversocketid).emit("newMessage" , newMessage)
+    }
 
     return res.status(201).json(
        new apiresponse(201 , newMessage , "message creation sucessfull")
